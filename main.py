@@ -81,9 +81,7 @@ def unregister_catalog_product_form(catalog: Catalog) -> None:
         except (ValueError, TypeError) as e:
             print(f"[Error: {e}]Please, enter a valid id...")
             continue
-        except:
-            input("Unknown Error!...")
-            exit(1)
+
         break
 
     for product in catalog.products:
@@ -100,15 +98,94 @@ def show_product_catalog(catalog: Catalog) -> None:
 
 
 def add_product_to_cart_form(catalog: Catalog, cart: Cart) -> None:
-    pass
+    clear()
+    print_store_header()
+    print(repr(catalog))
+
+    for key, qty in cart.products.items():
+        print(
+            f"{key.id} - {key.name} |- R$ {key.price:.2f} {qty}x "
+            + f"= {(key.price * qty):.2f}"
+        )
+
+    print("Select a product to add to your cart by providing it's ID.")
+
+    buffer: str = ""
+    print("Product ID: ")
+
+    while True:
+        try:
+            buffer = input("> ").strip()
+            p_id: int = int(buffer)
+
+            target: Product | None = None
+            for product in catalog.products:
+                if p_id == product.id:
+                    target = product
+
+            if target is not None:
+                cart.add_product(target)
+                input(f"{str(target)} was successfully added to cart...")
+                break
+            else:
+                print("[Error] Product not found. Please, enter a valid id...")
+
+        except (ValueError, TypeError) as e:
+            print(f"[Error: {e}]Please, enter a valid id...")
+            continue
 
 
 def remove_product_from_cart_form(catalog: Catalog, cart: Cart) -> None:
-    pass
+    clear()
+    print_store_header()
+
+    for key, qty in cart.products.items():
+        print(
+            f"{key.id} - {key.name} |- R$ {key.price:.2f} {qty}x "
+            + f"= {(key.price * qty):.2f}"
+        )
+
+    print("Select a product to remove from your cart by providing it's ID.")
+
+    buffer: str = ""
+    print("Product ID: ")
+
+    while True:
+        try:
+            buffer = input("> ").strip()
+            p_id: int = int(buffer)
+
+            target: Product | None = None
+            for product in cart.products.keys():
+                if p_id == product.id:
+                    target = product
+
+            if target is not None:
+                cart.remove_product(target)
+                input(f"{str(target)} was successfully removed from cart...")
+                break
+            else:
+                print("[Error] Product not found. Please, enter a valid id...")
+
+        except (ValueError, TypeError) as e:
+            print(f"[Error: {e}]Please, enter a valid id...")
+            continue
 
 
 def show_cart_items(cart: Cart) -> None:
-    pass
+    clear()
+    print_store_header()
+
+    for key, qty in cart.products.items():
+        print(
+            f"{key.id} - {key.name} |- R$ {key.price:.2f} {qty}x "
+            + f"= {(key.price * qty):.2f}"
+        )
+
+    print("\n")
+    print(f"TOTAL: R${cart.total:.2f}\n")
+
+    input("press <enter> to continue...")
 
 
 def get_total_value_report(cart: Cart) -> None:
@@ -120,6 +197,9 @@ def main():
         1: "Register Product",
         2: "Unregister Product",
         3: "Show Product Catalog",
+        4: "Add Product to Cart",
+        5: "Remove Product from Cart",
+        6: "Show Cart Items",
         0: "Exit",
     }
 
@@ -135,6 +215,12 @@ def main():
             unregister_catalog_product_form(catalog)
         elif option == 3:
             show_product_catalog(catalog)
+        elif option == 4:
+            add_product_to_cart_form(catalog, cart)
+        elif option == 5:
+            remove_product_from_cart_form(catalog, cart)
+        elif option == 6:
+            show_cart_items(cart)
         elif option == 0:
             input("Exiting program...")
             break
