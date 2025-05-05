@@ -21,10 +21,9 @@ def option_select_form(options: Dict[int, str]) -> int:
     for key, value in options.items():
         print(f"[{key}] - {value}")
 
-    buffer: str = input("> ")
-
-    try:
-        while True:
+    while True:
+        try:
+            buffer: str = input("> ")
             option: int = int(buffer)
 
             if option in options:
@@ -32,10 +31,8 @@ def option_select_form(options: Dict[int, str]) -> int:
             else:
                 print("Invalid option...")
 
-            buffer = input("> ")
-    except (ValueError, TypeError) as e:
-        print(f"Error: {e}")
-        exit(1)
+        except (ValueError, TypeError) as e:
+            print(f"Error: {e}")
 
 
 def register_catalog_product_form(catalog: Catalog) -> None:
@@ -119,7 +116,28 @@ def get_total_value_report(cart: Cart) -> None:
 
 
 def main():
-    pass
+    options: Dict[int, str] = {
+        1: "Register Product",
+        2: "Unregister Product",
+        3: "Show Product Catalog",
+        0: "Exit",
+    }
+
+    catalog: Catalog = Catalog()
+    cart: Cart = Cart()
+
+    while True:
+        option = option_select_form(options)
+
+        if option == 1:
+            register_catalog_product_form(catalog)
+        elif option == 2:
+            unregister_catalog_product_form(catalog)
+        elif option == 3:
+            show_product_catalog(catalog)
+        elif option == 0:
+            input("Exiting program...")
+            break
 
 
 if __name__ == "__main__":
