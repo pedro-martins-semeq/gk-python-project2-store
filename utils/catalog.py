@@ -18,6 +18,12 @@ class Catalog:
         string += "--------------END--------------\n"
         return string
 
+    def __repr__(self) -> str:
+        string = ""
+        for product in self.__products:
+            string += (str(product)) + "\n"
+        return string
+
     @property
     def products(self) -> Set[Product]:
         return self.__products
