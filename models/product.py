@@ -8,6 +8,15 @@ class Product:
         self.__name: str = name
         self.__price: float = price
 
+    def __str__(self):
+        return f"Id: {self.id} | Name: {self.name} | Price: R${self.price}"
+
+    def __eq__(self, other):
+        return isinstance(other, Product) and self.id == other.id
+
+    def __hash__(self):
+        return hash(self.id)
+
     @property
     def id(self) -> int:
         return self.__id
@@ -19,6 +28,3 @@ class Product:
     @property
     def price(self) -> float:
         return self.__price
-
-    def __str__(self):
-        return f"Id: {self.id} | Name: {self.name} | Price: R${self.price}"

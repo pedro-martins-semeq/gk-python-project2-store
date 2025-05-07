@@ -15,6 +15,12 @@ class Cart:
     def total(self) -> float:
         return self.__total
 
+    def __len__(self):
+        return len(self.__products)
+
+    def is_empty(self) -> bool:
+        return len(self) == 0
+
     def add_product(self, product: Product) -> None:
         if product in self.products.keys():
             self.products[product] += 1

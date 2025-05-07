@@ -15,7 +15,7 @@ class Catalog:
                 + "=============================\n"
             )
 
-        string += "--------------END--------------\n"
+        string += "-------------END-------------\n"
         return string
 
     def __repr__(self) -> str:
@@ -24,13 +24,38 @@ class Catalog:
             string += (str(product)) + "\n"
         return string
 
+    def __iter__(self):
+        return iter(self.__products)
+
+    def __len__(self):
+        return len(self.__products)
+
     @property
     def products(self) -> Set[Product]:
         return self.__products
 
+    def is_empty(self) -> bool:
+        return len(self) == 0
+
+    def get_product_by_id(self, id: int) -> Product:
+        for product in self.__products:
+            if id == product.id:
+                return product
+        raise ValueError(f"Error: Product with id {id} not found.")
+
     def register_product(self, product: Product) -> None:
         self.__products.add(product)
 
-    def unregister_product(self, product: Product) -> None:
-        if product in self.__products:
+    def unregister_product(self, product: Product) -> bool:
+        try:
             self.__products.remove(product)
+            return True
+        except KeyError:
+            return False
+
+    def unregister_product_by_id(self, id: int) -> bool:
+        try:
+            product: Product = self.get_product_by_id(id)
+            return self.unregister_product(product)
+        except ValueError:
+            return False
